@@ -16,7 +16,8 @@ provider "aws" {
 
 
 module "s3-bucket" {
-  source                    = "git::git@github.com:CarlsbergGBS/carlsberg-infra-source.git//modules/tf_aws_s3?ref=v6.9"
+  #source                    = "git::git@github.com:CarlsbergGBS/carlsberg-infra-source.git//modules/tf_aws_s3?ref=v6.9"
+  source = "/Users/joseanjos/Documents/carlsbergsrc/carlsberg-infra-source/modules/tf_aws_s3"
 
   region                    = var.region
   bucket_name               = var.bucket_name
@@ -28,9 +29,31 @@ module "s3-bucket" {
   restrict_public_buckets   = var.restrict_public_buckets
   environment               = var.environment
   tags                      = var.tags
-  #cors_rule                 = var.cors_rule
+  
   is_cloudfront             = var.is_cloudfront
+  user_actions              = var.user_actions
 }
+
+######
+data "aws_iam_policy_document" "iam_bucket_policy" {
+  statement {
+    sid       = "1"
+    actions   = var.user_actions 
+    resources = ["${module.s3-bucket.this_aws_s3_bucket_arn}/*", "${module.s3-bucket.this_aws_s3_bucket_arn}"]
+  }
+}
+
+resource "aws_iam_policy" "iam_policy" {
+  name   = "${var.environment}-${var.bucket_name}_iam_user_policy"
+  path   = "/"
+  policy = data.aws_iam_policy_document.iam_bucket_policy.json
+}
+
+resource "aws_iam_user_policy_attachment" "test-attach" {
+  user       = module.s3-bucket.this_iam_user_name
+  policy_arn = aws_iam_policy.iam_policy.arn
+}
+######
 
 output "access_key" {
   value = module.s3-bucket.this_iam_access_key_id

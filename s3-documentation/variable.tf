@@ -10,3 +10,4 @@ variable environment {}
 variable tags {}
 #variable cors_rule {}
 variable is_cloudfront {}
+variable user_actions {}
