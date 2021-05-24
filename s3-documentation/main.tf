@@ -16,8 +16,7 @@ provider "aws" {
 
 
 module "s3-bucket" {
-  #source                    = "git::git@github.com:CarlsbergGBS/carlsberg-infra-source.git//modules/tf_aws_s3?ref=v6.9"
-  source = "/Users/joseanjos/Documents/carlsbergsrc/carlsberg-infra-source/modules/tf_aws_s3"
+  source                    = "git::git@github.com:CarlsbergGBS/carlsberg-infra-source.git//modules/tf_aws_s3?ref=v7.2"
 
   region                    = var.region
   bucket_name               = var.bucket_name
@@ -34,7 +33,7 @@ module "s3-bucket" {
   user_actions              = var.user_actions
 }
 
-######
+######  
 data "aws_iam_policy_document" "iam_bucket_policy" {
   statement {
     sid       = "1"
