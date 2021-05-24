@@ -1,0 +1,12 @@
+variable region {}
+variable bucket_name {}
+variable actions {}                
+variable acl {}                    
+variable block_public_acls {}      
+variable block_public_policy {}   
+variable ignore_public_acls {}     
+variable restrict_public_buckets {}
+variable environment {}            
+variable tags {}
+#variable cors_rule {}
+variable is_cloudfront {}
